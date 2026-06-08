@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --cream:      #faf8f4;
+      --white:      #ffffff;
+      --accent:     #3d6b4f;
+      --accent-lt:  #eaf2ed;
+      --text:       #1c1c1c;
+      --muted:      #6b6b6b;
+      --border:     #e8e3db;
+      --shadow:     0 4px 24px rgba(0,0,0,0.07);
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(250, 248, 244, 0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 64px;
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--accent);
+      letter-spacing: 0.01em;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 32px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    
+    .section {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-lt);
+      padding: 4px 12px;
+      border-radius: 100px;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 600;
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    .divider {
+      width: 40px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+      margin-bottom: 36px;
+    }
+    .hero {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 90px 5%;
+      display: flex;
+      align-items: center;
+      gap: 56px;
+    }
+
+    .hero-avatar {
+      flex-shrink: 0;
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: var(--accent-lt);
+      border: 3px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.2rem;
+    }
+
+    .hero-text h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 600;
+      line-height: 1.15;
+      margin-bottom: 6px;
+    }
+
+    .hero-text h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-role {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .hero-text p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      max-width: 420px;
+      margin-bottom: 28px;
+      font-weight: 300;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 11px 26px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: #2f5640;
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--accent);
+      border: 1.5px solid var(--accent);
+    }
+    .btn-outline:hover {
+      background: var(--accent-lt);
+      transform: translateY(-2px);
+    }
+    .about-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      font-size: 0.93rem;
+      font-weight: 300;
+      margin-bottom: 14px;
+    }
+
+    .about-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .info-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .info-card-icon {
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .info-card-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .info-card-value {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+    #education { background: var(--white); }
+
+    .edu-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .edu-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      background: var(--cream);
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .edu-card:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+
+    .edu-icon {
+      font-size: 1.8rem;
+      flex-shrink: 0;
+      width: 48px;
+      height: 48px;
+      background: var(--accent-lt);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .edu-body { flex: 1; }
+
+    .edu-degree {
+      font-weight: 600;
+      font-size: 0.97rem;
+      margin-bottom: 4px;
+    }
+
+    .edu-school {
+      font-size: 0.85rem;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .edu-year {
+      font-size: 0.78rem;
+      color: var(--muted);
+      background: var(--border);
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 100px;
+      margin-bottom: 8px;
+    }
+
+    .edu-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    
+    .skills-groups {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .skill-group-title {
+      font-size: 0.78rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .skill-tag {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      color: var(--text);
+      padding: 7px 16px;
+      border-radius: 8px;
+      font-size: 0.83rem;
+      font-weight: 400;
+      transition: all 0.2s;
+      cursor: default;
+    }
+
+    .skill-tag:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-lt);
+    }
+
+    .skill-tag.learning {
+      border-style: dashed;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .skill-legend {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 16px;
+    }
+    .skill-legend span {
+      border: 1.5px dashed var(--border);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-style: italic;
+      margin-right: 6px;
+    }
+
+   
+    #contact { background: var(--white); }
+
+    .contact-wrapper {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px;
+    }
+
+    .contact-intro {
+      color: var(--muted);
+      font-size: 0.93rem;
+      font-weight: 300;
+      max-width: 480px;
+      margin-bottom: 32px;
+    }
+
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 520px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .form-group input,
+    .form-group textarea {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-family: inherit;
+      font-size: 0.88rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+      resize: none;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: #bbb;
+    }
+
+    #form-msg {
+      font-size: 0.83rem;
+      min-height: 1.2em;
+      color: var(--accent);
+    }
+
+    .contact-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 28px 0 20px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .contact-divider::before,
+    .contact-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .social-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      color: var(--text);
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-size: 0.83rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .social-link:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 0.78rem;
+      color: #aaa;
+      border-top: 1px solid var(--border);
+      background: var(--white);
+    }
+
+    
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    
+    @media (max-width: 680px) {
+      .hero {
+        flex-direction: column;
+        text-align: center;
+        gap: 28px;
+        padding: 60px 5%;
+      }
+      .hero-text p { margin: 0 auto 28px; }
+      .hero-btns { justify-content: center; }
+
+      .about-content { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        gap: 20px;
+        position: absolute;
+        top: 64px;
+        left: 0; right: 0;
+        background: var(--white);
+        padding: 28px 5%;
+        border-bottom: 1px solid var(--border);
+      }
+      .nav-links.open { display: flex; }
+      .nav-toggle { display: flex; }
+
+      .contact-wrapper { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-logo">Jhanani</div>  
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <section class="hero" id="home">
+
+    <!-- Replace the emoji below with:  <img src="your-photo.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:50%"> -->
+    <div class="hero-avatar">🧑‍💻</div>
+
+    <div class="hero-text">
+      <p class="hero-role">CS / IT Student</p>                   <!-- ← Your role -->
+      <h1>Hi, I'm <em>Jhanani</em></h1>                        <!-- ← Jhanani -->
+      <p>
+        A passionate Computer Science student who loves building things on the web
+        and exploring new technologies. Currently focused on learning full-stack development.
+      </p>                                                        <!-- ← Short intro -->
+      <div class="hero-btns">
+        <a href="#contact" class="btn btn-primary">Say Hello 👋</a>
+        <a href="#skills"  class="btn btn-outline">My Skills</a>
+      </div>
+    </div>
+
+  </section>
+  <div id="about">
+    <div class="section">
+      <span class="section-label">About Me</span>
+      <h2 class="section-title">A little about myself</h2>
+      <div class="divider"></div>
+
+      <div class="about-content">
+
+        <!-- Left: text -->
+        <div class="about-text fade-in">
+          <p>
+            I'm a third-year CSE student with a strong interest in web development
+            and problem-solving. I enjoy writing clean code and learning something new every day.
+          </p>       
+          <p>
+            Outside of class, I like exploring open-source projects, watching tech videos,
+            and occasionally gaming. I'm eager to apply what I learn to real projects.
+          </p>
+        </div>
+
+        <!-- Right: info cards -->
+        <div class="about-cards fade-in">
+          <div class="info-card">
+            <div class="info-card-icon">🎓</div>
+            <div>
+              <div class="info-card-label">Degree</div>
+              <div class="info-card-value">B.E. — CSE</div>  
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon">📍</div>
+            <div>
+              <div class="info-card-label">Location</div>
+              <div class="info-card-value">tamilnadu,India</div>         
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon">💡</div>
+            <div>
+              <div class="info-card-label">Interests</div>
+              <div class="info-card-value">Web Dev · Problem Solving</div> 
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon">📬</div>
+            <div>
+              <div class="info-card-label">Email</div>
+              <div class="info-card-value">jhananisr2006@gmail.com</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="education">
+    <div class="section">
+      <span class="section-label">Education</span>
+      <h2 class="section-title">My academic journey</h2>
+      <div class="divider"></div>
+
+      <div class="edu-timeline">
+
+        <!-- Entry 1 — College -->
+        <div class="edu-card fade-in">
+          <div class="edu-icon">🏫</div>
+          <div class="edu-body">
+            <div class="edu-degree">B.E. Computer Science & Engineering</div>
+            <div class="edu-school">Your College Name, Chennai</div>           
+            <div class="edu-year">2024 – 2028 (Ongoing)</div>                 
+            <div class="edu-desc">
+              Studying core subjects like Data Structures, DBMS, Operating Systems,
+              and Web Technologies. CGPA: 8.6 / 10
+            </div>                                                              
+          </div>
+        </div>
+        <div class="edu-card fade-in">
+          <div class="edu-icon">📚</div>
+          <div class="edu-body">
+            <div class="edu-degree">Higher Secondary (Class XII)</div>
+            <div class="edu-school">Cluny Matriculation higher secondary school</div>                    
+            <div class="edu-year">Completed 2024</div>
+            <div class="edu-desc">
+              Studied Maths, Physics, Chemistry and Computer Science. Scored 91%.
+            </div>
+          </div>
+        </div>
+
+        
+
+      </div>
+    </div>
+  </div>
+  <div id="skills">
+    <div class="section">
+      <span class="section-label">Skills</span>
+      <h2 class="section-title">What I know so far</h2>
+      <div class="divider"></div>
+
+      <div class="skills-groups fade-in">
+
+        <!-- Group 1 -->
+        <div>
+          <div class="skill-group-title">Languages</div>
+          <div class="skill-tags">
+            <span class="skill-tag">C</span>
+            <span class="skill-tag">Java</span>
+            <span class="skill-tag">HTML</span>
+            <span class="skill-tag">CSS</span>
+            <span class="skill-tag learning">JavaScript ✦</span>
+          </div>
+        </div>
+        <div>
+          <div class="skill-group-title">Tools & Platforms</div>
+          <div class="skill-tags">
+            <span class="skill-tag">VS Code</span>
+            <span class="skill-tag">GitHub</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="skill-group-title">Concepts</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Data Structures</span>
+            <span class="skill-tag">OOP</span>
+            <span class="skill-tag learning">Databases ✦</span>
+          </div>
+        </div>
+
+      </div>
+
+      <p class="skill-legend"><span>Full stack✦</span> = currently learning</p>
+    </div>
+  </div>
+  <div id="contact">
+    <div class="section">
+      <span class="section-label">Contact</span>
+      <h2 class="section-title">Let's connect</h2>
+      <div class="divider"></div>
+
+      <div class="contact-wrapper fade-in">
+
+        <p class="contact-intro">
+          I'm always happy to hear from fellow students, mentors, or anyone with an
+          interesting opportunity. Drop me a message!
+        </p>
+        <form class="contact-form" id="contactForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fname">Name</label>
+              <input type="text" id="fname" placeholder="Jhanani" required />
+            </div>
+            <div class="form-group">
+              <label for="femail">Email</label>
+              <input type="email" id="femail" placeholder="jhananisr2006@gmail.com" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="fmsg">Message</label>
+            <textarea id="fmsg" rows="4" placeholder="Hi! I'd love to chat about…" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:fit-content">Send Message →</button>
+          <p id="form-msg"></p>
+        </form>
+
+        <div class="contact-divider">or find me on</div>
+
+        <!-- ── Social Links ── -->
+        <div class="social-links">
+          <a href="mailto:you@email.com" class="social-link">
+            📧 jhananisr2006@gmail.com                   <!-- ← Your email -->
+          </a>
+          
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <script>
+    const toggle   = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+    navLinks.querySelectorAll('a').forEach(a =>
+      a.addEventListener('click', () => navLinks.classList.remove('open'))
+    );
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const msg = document.getElementById('form-msg');
+      msg.textContent = '✅ Thanks! I\'ll get back to you soon.';
+      this.reset();
+    });
+  </script>
+</body>
+</html>
