@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Inkwell — Blog Platform</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--ink:#1a1a2e;--paper:#fdfcf8;--accent:#e07b39;--accent2:#f0a86a;--muted:#888;--border:#e5e0d8;--card:#fff;--slate:#555;--danger:#c0392b;--success:#27ae60;--shadow:0 2px 20px rgba(0,0,0,.08);--r:10px}
+body{font-family:'Inter',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh}
+h1,h2,h3,.brand{font-family:'Lora',serif}
+nav{background:var(--ink);padding:0 36px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.35)}
+.brand{color:var(--accent);font-size:1.4rem;font-style:italic}
+.nav-links{display:flex;gap:4px;align-items:center}
+.nb{background:none;border:none;color:#ccc;cursor:pointer;font-family:'Inter',sans-serif;font-size:.82rem;font-weight:500;padding:7px 12px;border-radius:6px;transition:.2s}
+.nb:hover{background:rgba(255,255,255,.1);color:#fff}
+.nb.ac{background:var(--accent);color:#fff}.nb.ac:hover{background:var(--accent2)}
+.page{display:none;max-width:1080px;margin:0 auto;padding:32px 22px}.page.on{display:block}
+.auth-box{max-width:400px;margin:56px auto;background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:38px;border:1px solid var(--border)}
+.auth-box h2{margin-bottom:4px}.auth-box .sub{color:var(--muted);font-size:.87rem;margin-bottom:26px}
+label{display:block;font-size:.73rem;font-weight:600;color:var(--slate);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+input,textarea,select{width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:7px;font-family:'Inter',sans-serif;font-size:.9rem;background:var(--paper);color:var(--ink);margin-bottom:14px;transition:.2s;resize:vertical}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 20px;border-radius:7px;font-family:'Inter',sans-serif;font-weight:600;font-size:.87rem;cursor:pointer;border:none;transition:.2s}
+.bp{background:var(--ink);color:#fff;width:100%}.bp:hover{background:#2d2d4e}
+.ba{background:var(--accent);color:#fff}.ba:hover{background:var(--accent2)}
+.bo{background:none;border:1.5px solid var(--border);color:var(--ink)}.bo:hover{border-color:var(--accent);color:var(--accent)}
+.bd{background:var(--danger);color:#fff}.bd:hover{opacity:.88}
+.sm{padding:6px 12px;font-size:.77rem}
+.al{padding:9px 13px;border-radius:7px;font-size:.82rem;margin-bottom:12px}
+.er{background:#fdecea;color:var(--danger);border:1px solid #f5c6c6}
+.ok{background:#e8f8ee;color:var(--success);border:1px solid #b6dfc9}
+.lnk{color:var(--accent);cursor:pointer;font-weight:600}
+.hero{background:linear-gradient(135deg,var(--ink),#16213e);color:#fff;border-radius:16px;padding:68px 46px;margin-bottom:40px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-80px;right:-80px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(224,123,57,.22),transparent 70%);pointer-events:none}
+.hero h1{font-size:2.8rem;line-height:1.2;margin-bottom:12px}.hero h1 em{color:var(--accent);font-style:italic}
+.hero p{color:rgba(255,255,255,.6);max-width:440px;line-height:1.7;margin-bottom:26px}
+.hero-row{display:flex;gap:12px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px}
+.ftag{padding:5px 13px;border-radius:20px;font-size:.74rem;font-weight:600;border:1.5px solid var(--border);background:none;cursor:pointer;color:var(--slate);transition:.2s}
+.ftag:hover,.ftag.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:20px}
+.pcard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:.22s}
+.pcard:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.1)}
+.pcov{height:155px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:linear-gradient(135deg,#f0ece2,#e5dfd3)}
+.pbod{padding:17px}
+.pcat{font-size:.67rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.ptit{font-family:'Lora',serif;font-size:1.03rem;margin-bottom:7px;line-height:1.4}
+.pexc{font-size:.79rem;color:var(--muted);line-height:1.55;margin-bottom:13px}
+.pmeta{display:flex;justify-content:space-between;align-items:center;font-size:.74rem;color:var(--muted)}
+.av{width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:700;margin-right:4px;flex-shrink:0}
+.dh{background:linear-gradient(135deg,var(--ink),#16213e);border-radius:14px;padding:44px;margin-bottom:28px;color:#fff;position:relative;overflow:hidden}
+.dh::before{content:'';position:absolute;top:-50px;right:-50px;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,rgba(224,123,57,.2),transparent 70%);pointer-events:none}
+.dh .dcat{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+.dh h1{font-size:1.9rem;line-height:1.3;margin-bottom:12px}
+.dh .dmeta{font-size:.8rem;color:rgba(255,255,255,.5);display:flex;gap:16px;flex-wrap:wrap}
+.dbody{font-family:'Lora',serif;font-size:1.03rem;line-height:1.85;color:#333;margin-bottom:32px}
+.dbody p{margin-bottom:15px}
+.dact{display:flex;gap:10px;margin-bottom:32px;padding-bottom:26px;border-bottom:2px solid var(--border)}
+.cform{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;margin-bottom:22px}
+.cbox{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:11px}
+.chead{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.caui{font-weight:600;font-size:.86rem;display:flex;align-items:center;gap:5px}
+.cdate{font-size:.73rem;color:var(--muted)}
+.ctxt{font-size:.88rem;color:var(--slate);line-height:1.6}
+.ecard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:30px;box-shadow:var(--shadow)}
+.ecard h2{margin-bottom:20px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.dstats{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-bottom:28px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;text-align:center}
+.sn{font-size:1.9rem;font-weight:700;font-family:'Lora',serif}
+.sl{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:3px}
+.mpost{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.mpt{font-family:'Lora',serif;font-size:.96rem;font-weight:600;margin-bottom:3px}
+.mpm{font-size:.73rem;color:var(--muted)}
+.bdg{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.67rem;font-weight:700}
+.pub{background:#e8f8ee;color:var(--success)}.dft{background:#f5f5f5;color:var(--muted)}
+.toast{position:fixed;bottom:22px;right:22px;background:var(--ink);color:#fff;padding:10px 18px;border-radius:8px;font-size:.81rem;font-weight:500;z-index:999;transform:translateY(60px);opacity:0;transition:.3s}
+.toast.on{transform:translateY(0);opacity:1}
+.empty{text-align:center;padding:56px 20px;color:var(--muted)}
+.empty .ei{font-size:2.6rem;margin-bottom:10px}
+@media(max-width:600px){.hero{padding:34px 20px}.hero h1{font-size:1.9rem}.page{padding:18px 12px}.frow{grid-template-columns:1fr}.dh{padding:26px 18px}.hero-row{flex-direction:column}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="brand">✒ Inkwell</div>
+  <div class="nav-links">
+    <button class="nb" onclick="go('home')">🏠 Home</button>
+    <button class="nb" id="nbDash" style="display:none" onclick="go('dash')">📋 My Posts</button>
+    <button class="nb" id="nbWrite" style="display:none" onclick="newPost()">✏️ Write</button>
+    <button class="nb ac" id="nbAuth" onclick="go('auth')">Sign In</button>
+    <button class="nb" id="nbOut" style="display:none" onclick="signOut()">Sign Out</button>
+  </div>
+</nav>
+<div class="toast" id="toast"></div>
+
+<div class="page on" id="homePage">
+  <div class="hero">
+    <h1>Stories worth<br><em>reading.</em></h1>
+    <p>A place for thoughtful writing. Discover ideas, share perspectives, and join a community of curious minds.</p>
+    <div class="hero-row">
+      <button class="btn ba" onclick="go('auth')">Start Writing</button>
+      <button class="btn" style="border:1.5px solid rgba(255,255,255,.3);color:#fff;background:none" onclick="document.getElementById('feed').scrollIntoView({behavior:'smooth'})">Explore Posts</button>
+    </div>
+  </div>
+  <div id="feed">
+    <div class="filters" id="filterBar"></div>
+    <div class="grid" id="postsGrid"></div>
+  </div>
+</div>
+
+<div class="page" id="authPage">
+  <div class="auth-box">
+    <h2 id="authH">Welcome back</h2>
+    <p class="sub" id="authSub">Sign in to your Inkwell account</p>
+    <div id="authMsg"></div>
+    <div id="regExtra" style="display:none"><label>Full Name</label><input id="rName" placeholder="Your name"></div>
+    <label>Email</label><input type="email" id="aEmail" placeholder="you@example.com">
+    <label>Password</label><input type="password" id="aPass" placeholder="••••••••">
+    <button class="btn bp" onclick="doAuth()" id="authBtn">Sign In</button>
+    <p style="text-align:center;margin-top:14px;font-size:.83rem;color:var(--muted)">
+      <span id="sw1">No account?</span> <span class="lnk" onclick="toggleAuth()" id="sw2">Create one</span>
+    </p>
+  </div>
+</div>
+
+<div class="page" id="detailPage">
+  <div class="dh" id="dHero"></div>
+  <div class="dbody" id="dBody"></div>
+  <div class="dact" id="dAct"></div>
+  <div class="cform" id="cForm"></div>
+  <div id="cSection"><h3 id="cCount" style="font-family:'Lora',serif;font-size:1.15rem;margin-bottom:18px"></h3><div id="cList"></div></div>
+</div>
+
+<div class="page" id="editorPage">
+  <div class="ecard">
+    <h2 id="edH">New Post</h2>
+    <div class="frow">
+      <div><label>Title</label><input id="pTitle" placeholder="Your post title…"></div>
+      <div><label>Category</label>
+        <select id="pCat"><option>Technology</option><option>Design</option><option>Science</option><option>Culture</option><option>Travel</option><option>Food</option><option>Health</option><option>Business</option></select>
+      </div>
+    </div>
+    <label>Short Excerpt</label><input id="pExc" placeholder="One-line summary…">
+    <label>Cover Emoji</label><input id="pEmoji" placeholder="✍️" style="width:90px">
+    <label>Content</label><textarea id="pContent" rows="12" placeholder="Write your post here…"></textarea>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn ba" onclick="savePost(false)">🚀 Publish</button>
+      <button class="btn bo" onclick="savePost(true)">💾 Save Draft</button>
+      <button class="btn bo" style="margin-left:auto" onclick="go('dash')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="dashPage">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+    <h2>My Dashboard</h2>
+    <button class="btn ba sm" onclick="newPost()">✏️ New Post</button>
+  </div>
+  <div class="dstats" id="dStats"></div>
+  <h3 style="font-family:'Lora',serif;font-size:1.1rem;margin-bottom:14px">My Posts</h3>
+  <div id="myPosts"></div>
+</div>
+
+<script>
+const DB = {
+  users:[
+    {id:1,name:'Alice Chen',email:'alice@ink.com',pw:'alice123'},
+    {id:2,name:'Bob Rivera',email:'bob@ink.com',pw:'bob123'}
+  ],
+  posts:[
+    {id:1,uid:1,title:'The Art of Slow Reading',cat:'Culture',exc:'In a world of scrolling, there is quiet power in reading slowly.',emoji:'📚',content:'Reading slowly is a radical act in the age of information overload.\n\nWhen we skim, we extract facts. When we read slowly, we absorb meaning. The difference between knowing a thing and understanding it lies in the unhurried attention we give it.\n\nSlow reading is not about speed — it is about presence. Try it today: take one article and read it twice. You will be surprised how much you missed the first time.',draft:false,date:'2026-06-10',comments:[{id:1,uid:2,name:'Bob Rivera',text:'This changed how I approach my morning reading. Thank you!',date:'2026-06-11'}]},
+    {id:2,uid:1,title:'Designing for Emotion',cat:'Design',exc:'Great design speaks to how people feel, not just how things look.',emoji:'🎨',content:'Emotion is the invisible layer of every great design.\n\nWe often think of design as a visual discipline — colour, typography, layout. But the best designers understand that they are orchestrating feelings, not just pixels.\n\nA well-crafted interface should feel like a conversation with a thoughtful friend: clear, warm, and never condescending. The friction you remove and the delight you add both contribute to an emotional outcome.\n\nNext time you design something, ask not "does it look good?" but "how does it make someone feel?"',draft:false,date:'2026-06-15',comments:[]},
+    {id:3,uid:2,title:'Why We Need More Boredom',cat:'Science',exc:'Neuroscience reveals that boredom is the birthplace of creativity.',emoji:'🧠',content:'Boredom has a public-relations problem.\n\nWe treat it as an enemy to be defeated with notifications and endless content. But neuroscience tells a different story: boredom activates the default-mode network — the brain region linked to imagination, empathy, and insight.\n\nWhen we are bored, we daydream. And daydreaming is where ideas are born — where we connect unrelated concepts and process unresolved emotions.\n\nMaybe the next breakthrough idea is just one boring afternoon away.',draft:false,date:'2026-06-20',comments:[]},
+    {id:4,uid:2,title:'Street Food Diaries: Tokyo',cat:'Food',exc:'From ramen stalls at midnight to tamagoyaki at dawn — a culinary journey.',emoji:'🍜',content:'Tokyo taught me that the best meals happen at waist height.\n\nStreet food in Tokyo is not an afterthought — it is a philosophy. Each vendor perfects a single dish across decades. The tamagoyaki man at Tsukiji has been folding his omelette the same way for forty years.\n\nWandering through Shinjuku at midnight, bowl of ramen warming my hands, I understood why food culture matters. It is memory, identity, and generosity all at once.',draft:false,date:'2026-06-22',comments:[{id:2,uid:1,name:'Alice Chen',text:'Tokyo street food is unmatched! Did you try taiyaki near Harajuku?',date:'2026-06-23'}]}
+  ],
+  nPost:5, nCom:10, nUser:3
+};
+
+let CU=null, isLogin=true, editId=null, filt='All';
+const el = id => document.getElementById(id);
+const fmt = d => new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+const toast = (m,ok=true) => { const t=el('toast'); t.textContent=m; t.style.background=ok?'#1a1a2e':'#c0392b'; t.classList.add('on'); setTimeout(()=>t.classList.remove('on'),2600); };
+const uname = uid => { const u=DB.users.find(x=>x.id===uid); return u?u.name:'Unknown'; };
+
+function go(pg) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  el(pg+'Page').classList.add('on');
+  if(pg==='home') renderHome();
+  if(pg==='dash') renderDash();
+}
+
+function updateNav() {
+  el('nbAuth').style.display = CU?'none':'';
+  el('nbOut').style.display = CU?'':'none';
+  el('nbDash').style.display = CU?'':'none';
+  el('nbWrite').style.display = CU?'':'none';
+}
+
+function signOut() { CU=null; updateNav(); go('home'); toast('Signed out'); }
+
+function toggleAuth() {
+  isLogin=!isLogin;
+  el('authH').textContent = isLogin?'Welcome back':'Create account';
+  el('authSub').textContent = isLogin?'Sign in to your Inkwell account':'Join thousands of writers';
+  el('authBtn').textContent = isLogin?'Sign In':'Create Account';
+  el('regExtra').style.display = isLogin?'none':'block';
+  el('sw1').textContent = isLogin?'No account?':'Have an account?';
+  el('sw2').textContent = isLogin?'Create one':'Sign in instead';
+  el('authMsg').innerHTML='';
+}
+
+function doAuth() {
+  const email=el('aEmail').value.trim(), pass=el('aPass').value.trim();
+  if(!email||!pass){showMsg('Please fill all fields','er');return;}
+  if(isLogin){
+    const u=DB.users.find(x=>x.email===email&&x.pw===pass);
+    if(!u){showMsg('Invalid email or password','er');return;}
+    CU=u; updateNav(); go('home'); toast('Welcome back, '+u.name+'!');
+  } else {
+    const name=el('rName').value.trim();
+    if(!name){showMsg('Please enter your name','er');return;}
+    if(DB.users.find(x=>x.email===email)){showMsg('Email already registered','er');return;}
+    const u={id:DB.nUser++,name,email,pw:pass};
+    DB.users.push(u); CU=u; updateNav(); go('home'); toast('Welcome, '+u.name+'!');
+  }
+}
+
+function showMsg(m,cls){el('authMsg').innerHTML='<div class="al '+cls+'">'+m+'</div>';}
+
+function renderHome(){
+  const cats=['All',...[...new Set(DB.posts.filter(p=>!p.draft).map(p=>p.cat))]];
+  el('filterBar').innerHTML=cats.map(c=>'<button class="ftag'+(c===filt?' on':'')+'" onclick="setFilt(\''+c+'\')">'+c+'</button>').join('');
+  const list=DB.posts.filter(p=>!p.draft&&(filt==='All'||p.cat===filt));
+  el('postsGrid').innerHTML=list.length?list.map(p=>
+    '<div class="pcard" onclick="openPost('+p.id+')">'
+    +'<div class="pcov">'+p.emoji+'</div>'
+    +'<div class="pbod">'
+    +'<div class="pcat">'+p.cat+'</div>'
+    +'<div class="ptit">'+p.title+'</div>'
+    +'<div class="pexc">'+p.exc+'</div>'
+    +'<div class="pmeta"><span><span class="av">'+uname(p.uid)[0]+'</span>'+uname(p.uid)+'</span><span>💬 '+p.comments.length+' · '+fmt(p.date)+'</span></div>'
+    +'</div></div>'
+  ).join(''):'<div class="empty" style="grid-column:1/-1"><div class="ei">📭</div><p>No posts in this category yet</p></div>';
+}
+
+function setFilt(c){filt=c;renderHome();}
+
+function openPost(id){
+  const p=DB.posts.find(x=>x.id===id); if(!p)return;
+  el('dHero').innerHTML='<div class="dcat">'+p.cat+'</div><h1>'+p.title+'</h1>'
+    +'<p style="color:rgba(255,255,255,.6);font-size:.9rem;margin:8px 0 14px;line-height:1.65">'+p.exc+'</p>'
+    +'<div class="dmeta"><span>✍️ '+uname(p.uid)+'</span><span>📅 '+fmt(p.date)+'</span><span id="cMetaCount">💬 '+p.comments.length+' comments</span></div>';
+  el('dBody').innerHTML=p.content.split('\n\n').map(t=>'<p>'+t+'</p>').join('');
+  const own=CU&&CU.id===p.uid;
+  el('dAct').innerHTML='<button class="btn bo sm" onclick="go(\'home\')">← Back</button>'
+    +(own?'<button class="btn bo sm" onclick="editPost('+p.id+')">✏️ Edit</button><button class="btn bd sm" onclick="delPost('+p.id+')">🗑️ Delete</button>':'');
+  el('cForm').innerHTML=CU
+    ?'<h4 style="font-family:\'Lora\',serif;font-size:.95rem;margin-bottom:12px">Leave a Comment</h4>'
+     +'<textarea id="cTxt" rows="3" placeholder="Share your thoughts…"></textarea>'
+     +'<button class="btn ba sm" onclick="addComment('+p.id+')">Post Comment</button>'
+    :'<p style="color:var(--muted);font-size:.87rem"><span class="lnk" onclick="go(\'auth\')">Sign in</span> to leave a comment.</p>';
+  renderComments(p);
+  go('detail');
+}
+
+function renderComments(p){
+  el('cCount').textContent=p.comments.length+' Comment'+(p.comments.length!==1?'s':'');
+  el('cList').innerHTML=p.comments.length
+    ?p.comments.map(c=>'<div class="cbox"><div class="chead"><div class="caui"><span class="av">'+c.name[0]+'</span>'+c.name+'</div>'
+      +'<div style="display:flex;gap:8px;align-items:center"><span class="cdate">'+fmt(c.date)+'</span>'
+      +(CU&&CU.id===c.uid?'<button class="btn bd sm" onclick="delCom('+p.id+','+c.id+')">✕</button>':'')
+      +'</div></div><div class="ctxt">'+c.text+'</div></div>'
+    ).join('')
+    :'<div class="empty"><div class="ei">💬</div><p>Be the first to comment</p></div>';
+}
+
+function addComment(pid){
+  const t=(el('cTxt')||{value:''}).value.trim();
+  if(!t){toast('Write something first',false);return;}
+  const p=DB.posts.find(x=>x.id===pid);
+  p.comments.push({id:DB.nCom++,uid:CU.id,name:CU.name,text:t,date:new Date().toISOString().slice(0,10)});
+  renderComments(p);
+  const cm=el('cMetaCount'); if(cm) cm.textContent='💬 '+p.comments.length+' comments';
+  toast('Comment posted!');
+}
+
+function delCom(pid,cid){
+  if(!confirm('Delete this comment?'))return;
+  const p=DB.posts.find(x=>x.id===pid);
+  p.comments=p.comments.filter(c=>c.id!==cid);
+  renderComments(p);
+  toast('Comment deleted');
+}
+
+function newPost(){if(!CU){go('auth');return;} editId=null; el('edH').textContent='New Post'; ['pTitle','pExc','pContent'].forEach(f=>el(f).value=''); el('pEmoji').value='✍️'; el('pCat').value='Technology'; go('editor');}
+function editPost(id){const p=DB.posts.find(x=>x.id===id); editId=id; el('edH').textContent='Edit Post'; el('pTitle').value=p.title; el('pExc').value=p.exc; el('pContent').value=p.content; el('pEmoji').value=p.emoji; el('pCat').value=p.cat; go('editor');}
+
+function savePost(draft){
+  const title=el('pTitle').value.trim(), content=el('pContent').value.trim();
+  if(!title||!content){toast('Title and content are required',false);return;}
+  const data={title,content,exc:el('pExc').value.trim()||title,emoji:el('pEmoji').value.trim()||'✍️',cat:el('pCat').value,draft,date:new Date().toISOString().slice(0,10)};
+  if(editId){Object.assign(DB.posts.find(x=>x.id===editId),data);toast('Post updated!');}
+  else{DB.posts.push({id:DB.nPost++,uid:CU.id,comments:[],...data});toast(draft?'Draft saved!':'Post published! 🎉');}
+  go('dash');
+}
+
+function delPost(id){
+  if(!confirm('Delete this post permanently?'))return;
+  DB.posts=DB.posts.filter(p=>p.id!==id);
+  toast('Post deleted'); go('home');
+}
+
+function renderDash(){
+  if(!CU)return;
+  const mine=DB.posts.filter(p=>p.uid===CU.id);
+  const pub=mine.filter(p=>!p.draft), dft=mine.filter(p=>p.draft), tc=mine.reduce((s,p)=>s+p.comments.length,0);
+  el('dStats').innerHTML=[{n:pub.length,l:'Published'},{n:dft.length,l:'Drafts'},{n:tc,l:'Comments'},{n:DB.posts.filter(p=>!p.draft).length,l:'All Posts'}]
+    .map(s=>'<div class="stat"><div class="sn">'+s.n+'</div><div class="sl">'+s.l+'</div></div>').join('');
+  el('myPosts').innerHTML=mine.length
+    ?mine.slice().reverse().map(p=>'<div class="mpost">'
+      +'<div style="flex:1"><div class="mpt">'+p.emoji+' '+p.title+'</div>'
+      +'<div class="mpm">'+p.cat+' · '+fmt(p.date)+' · 💬 '+p.comments.length+' <span class="bdg '+(p.draft?'dft':'pub')+'">'+(p.draft?'Draft':'Published')+'</span></div></div>'
+      +'<div style="display:flex;gap:7px;flex-shrink:0">'
+      +'<button class="btn bo sm" onclick="openPost('+p.id+')">View</button>'
+      +'<button class="btn bo sm" onclick="editPost('+p.id+')">Edit</button>'
+      +'<button class="btn bd sm" onclick="delPost('+p.id+')">Delete</button>'
+      +'</div></div>'
+    ).join('')
+    :'<div class="empty"><div class="ei">✍️</div><p>No posts yet. <span class="lnk" onclick="newPost()">Write your first one</span></p></div>';
+}
+
+updateNav();
+renderHome();
+</script>
+</body>
+</html>
